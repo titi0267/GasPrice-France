@@ -5,7 +5,7 @@ export interface GasStationList {
         {
             links: [],
             record: DatasetGasStation
-        }
+        },
     ]
 }
 
