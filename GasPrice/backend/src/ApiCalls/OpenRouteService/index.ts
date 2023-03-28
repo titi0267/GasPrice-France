@@ -1,6 +1,7 @@
 import makeRequest from "../../services/request.services";
 import ENV from "../../env";
 import { GeoCodingList } from "../../constants/geoCodingList";
+import { GeoJsonType } from "../../constants/geoJson";
 
 const autoCompleteAdress = async (adress: string) => {
   const autoCompleteResult = await makeRequest<{
@@ -22,7 +23,7 @@ const autoCompleteAdress = async (adress: string) => {
   let maxResult = 0;
 
   autoCompleteResult.features.map(loc => {
-    if (maxResult > 10) return;
+    if (maxResult > 50) return;
     refineResult.push({
       id: loc.properties.id,
       name: loc.properties.name,
@@ -36,4 +37,14 @@ const autoCompleteAdress = async (adress: string) => {
   return refineResult;
 };
 
-export default autoCompleteAdress;
+//coords format 8.681495,49.41461
+const generateGeoJsonCoordinates = async (start: string, end: string) => {
+  const generationResult = await makeRequest<{ features: Array<GeoJsonType> }>(
+    `https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ENV.openRouteServiceApiKey}&start=${start}&end=${end}`,
+    "GET",
+    "OpenRouteService",
+  );
+
+  return generationResult.features;
+};
+export { autoCompleteAdress, generateGeoJsonCoordinates };

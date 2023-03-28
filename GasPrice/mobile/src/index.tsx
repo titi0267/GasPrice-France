@@ -1,7 +1,7 @@
 import fetchGasStationList from "./services/fetchGasStationList.service";
 import { DatasetGasStation, GasStationList } from "./types/gouvData.types";
 import React, { useEffect, useState, useRef } from "react";
-import { Text, TextInput, View, StyleSheet } from "react-native";
+import { Text, TextInput, View, StyleSheet, Button } from "react-native";
 import {
   AutocompleteDropdown,
   TAutocompleteDropdownItem,
@@ -10,14 +10,22 @@ import {
 import MapView from "./views/landing";
 import fetchGeoCodingResults from "./services/fetchGeoCodingRes.service";
 import { GeoCodingData } from "./types/geoCoding.type";
+import SearchBar from "./components/searchBar";
 
 const PathInput = () => {
-  const [startPoint, setStartPoint] = useState("");
-  const [value, setValue] = useState(null);
-  const [data, setData] = useState<DatasetGasStation[]>([]);
-  const [textStartValue, setStartValue] = useState("");
-  const [geoCodingValues, setGeoCodingValues] = useState<GeoCodingData[]>([]);
+  const [gasData, setGasData] = useState<DatasetGasStation[]>([]);
+  const [geoCodingStart, setGeoCodingStart] = useState<GeoCodingData[]>([]);
+  const [geoCodingEnd, setGeoCodingEnd] = useState<GeoCodingData[]>([]);
+  const [disable, setDisable] = useState(true);
 
+  const geoCodingStartCallback = (
+    geoCodingStartFromSearchBar: GeoCodingData[],
+  ) => {
+    setGeoCodingStart(geoCodingStartFromSearchBar);
+  };
+  const geoCodingEndCallback = (geoCodingEndFromSearchBar: GeoCodingData[]) => {
+    setGeoCodingEnd(geoCodingEndFromSearchBar);
+  };
   useEffect(() => {
     console.log("fetch data");
     fetchGasStationList({
@@ -30,75 +38,59 @@ const PathInput = () => {
       .then(prices => {
         if (!prices) return;
         prices.records.forEach(element => {
-          if (data.find(alreadyIn => alreadyIn.recordid === element.recordid))
+          if (
+            gasData.find(alreadyIn => alreadyIn.recordid === element.recordid)
+          )
             return;
-          setData(prevData => [...prevData, element]);
+          setGasData(prevData => [...prevData, element]);
         });
       });
   }, []);
 
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [dropDownValues, setDropdownValues] = useState<
-    TAutocompleteDropdownItem[]
-  >([]);
-  //const dropDownValues: TAutocompleteDropdownItem[] = [];
-
-  useEffect(() => {
-    console.log("start point change " + startPoint);
-    if (startPoint.length >= 3) {
-      console.log("c'est superieur a 3 lettres");
-      fetchGeoCodingResults({ adress: startPoint })
-        .catch(error => {
-          console.log(error);
-        })
-        .then(res => {
-          if (!res) return;
-          console.log(res);
-          res.forEach(element => {
-            if (
-              geoCodingValues.find(
-                alreadyIn => alreadyIn.label == element.label,
-              )
-            )
-              return;
-            setGeoCodingValues(prevValue => [...prevValue, element]);
-          });
-          geoCodingValues.forEach(element => {
-            if (dropDownValues.find(alreadyIn => alreadyIn.id === element.id))
-              return;
-            setDropdownValues(prevValues => [
-              ...prevValues,
-              { id: element.id, title: element.label },
-            ]);
-          });
-        });
-    }
-  }, [startPoint]);
-  const departments = ["Bas-Rhin", "Haut-Rhin"];
-
-  if (!geoCodingValues) {
+  if (
+    disable == true &&
+    geoCodingEnd &&
+    geoCodingStart &&
+    geoCodingEnd.length == 1 &&
+    geoCodingStart.length == 1
+  ) {
+    setDisable(false);
   }
-
+  if (
+    disable == false &&
+    (!geoCodingEnd ||
+      !geoCodingStart ||
+      geoCodingEnd.length != 1 ||
+      geoCodingStart.length != 1)
+  ) {
+    setDisable(true);
+  }
+  const departments = ["Bas-Rhin", "Haut-Rhin"];
   return (
     <View>
-      <View style={styles.dropdown}>
-        <AutocompleteDropdown
-          onChangeText={newText => setStartPoint(newText)}
-          clearOnFocus={false}
-          closeOnBlur={true}
-          closeOnSubmit={false}
-          onSelectItem={setSelectedItem}
-          dataSet={
-            dropDownValues
-          } /*Doesn't rerender immediatly after getting values ???*/
-          textInputProps={{
-            placeholder: "Départ",
-          }}
-        />
+      <View style={styles.startDropdown}>
+        <SearchBar
+          placeholder="Départ"
+          geoCodingCallback={geoCodingStartCallback}
+          geoCodingValue={geoCodingStart}></SearchBar>
       </View>
-
+      <View style={styles.endDropdown}>
+        <SearchBar
+          placeholder="Arrivée"
+          geoCodingCallback={geoCodingEndCallback}
+          geoCodingValue={geoCodingEnd}></SearchBar>
+      </View>
+      <Button
+        onPress={() => {
+          console.log(geoCodingStart);
+          console.log(geoCodingEnd);
+        }}
+        title="Generer ce trajet"
+        color="#841584"
+        disabled={disable}
+      />
       {/* <Text>
-        {data.map(item => {
+        {gasData.map(item => {
           return (
             <View key={item.recordid} style={styles.container}>
               <Text>
@@ -120,7 +112,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  dropdown: {
+  startDropdown: {
+    zIndex: 2,
+  },
+  endDropdown: {
     zIndex: 1,
   },
 });
