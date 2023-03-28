@@ -1,9 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import PathInput from "./src";
+import MapboxGl from "@rnmapbox/maps";
 
 export default function App() {
+
+
   return (
     <View style={styles.container}>
       <PathInput />

@@ -21,10 +21,27 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.titi672002.GasPrice"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "expo": {
+      "plugins": [
+        [
+          "@rnmapbox/maps",
+          {
+            "RNMapboxMapsImpl": "mapbox",
+            "RNMapboxMapsDownloadToken": "sk.eyJ1IjoidGl0aTY3MjAwMiIsImEiOiJjbGZuN3EydHcwamMwNDRyMmdnb3FxN2F4In0.YK4vLBPg_ij987AWoc8FiQ"
+          }
+        ]
+      ]
+    },
+    "extra": {
+      "eas": {
+        "projectId": "85c79e16-fd0c-4f58-99a1-2499f221cb04"
+      }
     }
   }
 }
