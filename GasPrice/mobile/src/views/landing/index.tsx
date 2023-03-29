@@ -7,6 +7,7 @@ import fetchGeoCode from "../../services/fetchGeoCode.service";
 const MapView = (props: {
   itinerary: GeoJSON.Feature;
   departmentToLoadCallback: React.Dispatch<React.SetStateAction<string[]>>;
+  storeGasDataCallback: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   MapboxGl.setWellKnownTileServer("Mapbox");
   MapboxGl.setAccessToken(ENV.mapboxApiKey);
@@ -24,19 +25,34 @@ const MapView = (props: {
   }, [camera.current]);
   useEffect(() => {
     if (!props.itinerary) return;
+    let elementId = 0;
     if (props.itinerary.geometry.type === "LineString") {
-      let elementId = 0;
-      props.itinerary.geometry.coordinates.forEach(element => {
+      let count =
+        Math.floor(props.itinerary.geometry.coordinates.length / 100) + 1;
+      for (let i = 0; i < props.itinerary.geometry.coordinates.length; i++) {
+        const element = props.itinerary.geometry.coordinates[i];
         if (elementId % 100 == 0) {
           fetchGeoCode({ coords: [element[0], element[1]] })
             .catch(error => console.log("GeoCode: " + error))
             .then(res => {
               if (!res) return;
+              console.log("ajout d'un element");
               props.departmentToLoadCallback([res]);
+            })
+            .finally(() => {
+              count--;
             });
         }
         elementId += 1;
-      });
+      }
+      const checkAllResolved = setInterval(() => {
+        if (count === 0) {
+          console.log("Pass a true");
+          props.storeGasDataCallback(true);
+          clearInterval(checkAllResolved);
+        }
+      }, 100);
+      return () => clearInterval(checkAllResolved);
     }
   }, [props.itinerary]);
   const renderItinerary = () => {

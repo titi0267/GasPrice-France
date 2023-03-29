@@ -20,6 +20,7 @@ const PathInput = () => {
   const [disable, setDisable] = useState(true);
   const [itinerary, setItinerary] = useState<GeoJSON.Feature>(null);
   const [departmentToLoad, setDepartmentToLoad] = useState<string[]>([]);
+  const [storeGasData, setStoreGasData] = useState(false);
 
   const geoCodingStartCallback = (
     geoCodingStartFromSearchBar: GeoCodingData[],
@@ -34,24 +35,24 @@ const PathInput = () => {
       ...prevData,
       departmentToLoadFromMapView[0],
     ]);
+    console.log("add dep: " + departmentToLoadFromMapView);
+  };
+  const storeGasDataCallback = (storeGasDataFromMapView: boolean) => {
+    setStoreGasData(storeGasDataFromMapView);
+    console.log("Set new state: " + storeGasDataFromMapView);
   };
 
   const addItem = (newItem: DatasetGasStation) => {
-    const doesExist = gasData.some(item => item.recordid === newItem.recordid);
-    console.log("is it in ? " + doesExist);
-    if (!doesExist) {
-      setGasData([...gasData, newItem]);
-      console.log(gasData.length);
-    }
+    if (gasData.some(item => item.recordid === newItem.recordid)) return;
+    setGasData([...gasData, newItem]);
+    console.log(gasData.length);
   };
   useEffect(() => {
     if (itinerary && itinerary.geometry.type == "LineString") {
-      if (
-        itinerary.geometry.coordinates.length / 100 <=
-        departmentToLoad.length
-      ) {
+      if (storeGasData == true) {
         const uniqueDepartment = Array.from(new Set(departmentToLoad));
         uniqueDepartment.forEach(element => {
+          console.log("recherche sur : " + element);
           fetchGasStationList({
             code_department: element.toString(),
           })
@@ -59,25 +60,28 @@ const PathInput = () => {
               console.log(error);
             })
             .then(prices => {
-              if (!prices) return;
-              if (!prices.records) return;
+              if (!prices) {
+                console.log("probleme sur " + element);
+                return;
+              }
+              console.log("result nbr: " + prices.nhits + " for: " + element);
+              if (!prices.records) {
+                console.log("record is empty !");
+                return;
+              }
               prices.records.forEach(element => {
-                const doesExist = gasData.some(
-                  item => item.recordid === element.recordid,
-                );
-                console.log("is it in ? " + doesExist + " " + element.recordid);
-                if (!doesExist) {
-                  setGasData(prevData => [...prevData, element]);
-                }
+                if (gasData.some(item => item.recordid === element.recordid))
+                  return;
+                setGasData(prevData => [...prevData, element]);
               });
             });
         });
+        setStoreGasData(false);
       }
     }
-  }, [departmentToLoad]);
-
+  }, [storeGasData]);
   useEffect(() => {
-    console.log(gasData.length);
+    console.log("data len = " + gasData.length);
   }, [gasData]);
 
   if (
@@ -149,6 +153,7 @@ const PathInput = () => {
       <MapView
         itinerary={itinerary}
         departmentToLoadCallback={departmentToLoadCallback}
+        storeGasDataCallback={storeGasDataCallback}
       />
     </View>
   );

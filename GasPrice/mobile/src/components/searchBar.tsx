@@ -31,21 +31,20 @@ const SearchBar = (props: {
           if (!res) return;
           if (
             selectedItem &&
-            props.geoCodingValue.find(element => {
-              element.label != selectedItem.title ||
-                element.id != selectedItem.id;
+            props.geoCodingValue.some(value => {
+              value.label == selectedItem.label && value.id == selectedItem.id;
             })
           )
             return;
           props.geoCodingCallback([]);
 
           res.forEach(element => {
-            // if (
-            //   props.geoCodingValue.find(
-            //     alreadyIn => alreadyIn.label == element.label,
-            //   )
-            // )
-            //   return;
+            if (
+              props.geoCodingValue.some(value => {
+                value.label == element.label && value.id == element.id;
+              })
+            )
+              return;
             props.geoCodingCallback(prevValue => [...prevValue, element]);
           });
         });
@@ -55,7 +54,7 @@ const SearchBar = (props: {
   useEffect(() => {
     setDropdownValues([]);
     props.geoCodingValue.forEach(element => {
-      if (dropDownValues.find(alreadyIn => alreadyIn.id === element.id)) return;
+      if (dropDownValues.some(value => value.id == element.id)) return;
       setDropdownValues(prevValues => [
         ...prevValues,
         { id: element.id, title: element.label },
@@ -71,7 +70,7 @@ const SearchBar = (props: {
       }
       if (element.id == selectedItem.id) {
         props.geoCodingCallback([element]);
-        console.log("Element correspond a la recherrche " + element.label);
+        console.log("Element correspond a la recherche " + element.label);
       }
     });
   }, [selectedItem]);
