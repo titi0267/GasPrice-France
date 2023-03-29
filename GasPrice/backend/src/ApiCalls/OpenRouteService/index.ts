@@ -33,7 +33,6 @@ const autoCompleteAdress = async (adress: string) => {
     });
     maxResult += 1;
   });
-  console.log(refineResult);
   return refineResult;
 };
 

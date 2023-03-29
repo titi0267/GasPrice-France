@@ -2,8 +2,7 @@ import { GasStationList } from "../types/gouvData.types";
 import ENV from "../env";
 
 const fetchGasStationList = async (body: {
-  region: string;
-  department: string;
+  code_department: string;
 }): Promise<GasStationList> => {
   const res = await fetch(`http://${ENV.host}:${ENV.portBack}/gasStations`, {
     method: "POST",

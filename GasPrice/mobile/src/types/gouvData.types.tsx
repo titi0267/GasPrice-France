@@ -4,31 +4,31 @@ export interface GasStationList {
 }
 
 export interface DatasetGasStation {
-  datasetid: string;
+  //datasetid: string;
   recordid: string;
   fields: GasStationData;
   geometry: {
     type: string;
     coordinates: [];
   };
-  record_timestamp: string;
+  //record_timestamp: string;
 }
 
 export interface GasStationData {
   id: number;
   latitude: string;
   longitude: number;
-  cp: string;
-  pop: string;
+  // cp: string;
+  // pop: string;
   adresse: string;
   ville: string;
-  horaires: string | null;
-  services: string | null;
-  prix: string | null;
-  geom: {
-    lon: number;
-    lat: number;
-  };
+  // horaires: string | null;
+  // services: string | null;
+  // prix: string | null;
+  // geom: {
+  //   lon: number;
+  //   lat: number;
+  // };
   gazole_maj: string | null;
   gazole_prix: string | null;
   sp95_maj: string | null;
@@ -43,10 +43,10 @@ export interface GasStationData {
   sp98_prix: string | null;
   carburants_disponibles: [string];
   carburants_indisponibles: [string];
-  horaires_automate_24_24: string;
-  services_service: [string];
+  // horaires_automate_24_24: string;
+  // services_service: [string];
   departement: string;
   code_departement: string;
   region: string;
-  code_region: string;
+  // code_region: string;
 }

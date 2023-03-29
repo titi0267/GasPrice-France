@@ -11,12 +11,15 @@ import MapView from "./views/landing";
 import fetchGeoCodingResults from "./services/fetchGeoCodingRes.service";
 import { GeoCodingData } from "./types/geoCoding.type";
 import SearchBar from "./components/searchBar";
+import fetchGeoJsonResults from "./services/fetchGeoJson.service";
 
 const PathInput = () => {
   const [gasData, setGasData] = useState<DatasetGasStation[]>([]);
   const [geoCodingStart, setGeoCodingStart] = useState<GeoCodingData[]>([]);
   const [geoCodingEnd, setGeoCodingEnd] = useState<GeoCodingData[]>([]);
   const [disable, setDisable] = useState(true);
+  const [itinerary, setItinerary] = useState<GeoJSON.Feature>(null);
+  const [departmentToLoad, setDepartmentToLoad] = useState<string[]>([]);
 
   const geoCodingStartCallback = (
     geoCodingStartFromSearchBar: GeoCodingData[],
@@ -26,26 +29,56 @@ const PathInput = () => {
   const geoCodingEndCallback = (geoCodingEndFromSearchBar: GeoCodingData[]) => {
     setGeoCodingEnd(geoCodingEndFromSearchBar);
   };
+  const departmentToLoadCallback = (departmentToLoadFromMapView: string[]) => {
+    setDepartmentToLoad(prevData => [
+      ...prevData,
+      departmentToLoadFromMapView[0],
+    ]);
+  };
+
+  const addItem = (newItem: DatasetGasStation) => {
+    const doesExist = gasData.some(item => item.recordid === newItem.recordid);
+    console.log("is it in ? " + doesExist);
+    if (!doesExist) {
+      setGasData([...gasData, newItem]);
+      console.log(gasData.length);
+    }
+  };
   useEffect(() => {
-    console.log("fetch data");
-    fetchGasStationList({
-      region: "Grand+Est",
-      department: "Bas-Rhin",
-    })
-      .catch(error => {
-        console.log(error);
-      })
-      .then(prices => {
-        if (!prices) return;
-        prices.records.forEach(element => {
-          if (
-            gasData.find(alreadyIn => alreadyIn.recordid === element.recordid)
-          )
-            return;
-          setGasData(prevData => [...prevData, element]);
+    if (itinerary && itinerary.geometry.type == "LineString") {
+      if (
+        itinerary.geometry.coordinates.length / 100 <=
+        departmentToLoad.length
+      ) {
+        const uniqueDepartment = Array.from(new Set(departmentToLoad));
+        uniqueDepartment.forEach(element => {
+          fetchGasStationList({
+            code_department: element.toString(),
+          })
+            .catch(error => {
+              console.log(error);
+            })
+            .then(prices => {
+              if (!prices) return;
+              if (!prices.records) return;
+              prices.records.forEach(element => {
+                const doesExist = gasData.some(
+                  item => item.recordid === element.recordid,
+                );
+                console.log("is it in ? " + doesExist + " " + element.recordid);
+                if (!doesExist) {
+                  setGasData(prevData => [...prevData, element]);
+                }
+              });
+            });
         });
-      });
-  }, []);
+      }
+    }
+  }, [departmentToLoad]);
+
+  useEffect(() => {
+    console.log(gasData.length);
+  }, [gasData]);
 
   if (
     disable == true &&
@@ -65,7 +98,7 @@ const PathInput = () => {
   ) {
     setDisable(true);
   }
-  const departments = ["Bas-Rhin", "Haut-Rhin"];
+
   return (
     <View>
       <View style={styles.startDropdown}>
@@ -82,8 +115,21 @@ const PathInput = () => {
       </View>
       <Button
         onPress={() => {
-          console.log(geoCodingStart);
-          console.log(geoCodingEnd);
+          fetchGeoJsonResults({
+            start:
+              geoCodingStart[0].geometry[0].toString() +
+              "," +
+              geoCodingStart[0].geometry[1].toString(),
+            end:
+              geoCodingEnd[0].geometry[0].toString() +
+              "," +
+              geoCodingEnd[0].geometry[1].toString(),
+          })
+            .catch(error => console.log(error))
+            .then(res => {
+              if (!res) return;
+              setItinerary(res[0]);
+            });
         }}
         title="Generer ce trajet"
         color="#841584"
@@ -100,7 +146,10 @@ const PathInput = () => {
           );
         })}
       </Text> */}
-      {MapView()}
+      <MapView
+        itinerary={itinerary}
+        departmentToLoadCallback={departmentToLoadCallback}
+      />
     </View>
   );
 };

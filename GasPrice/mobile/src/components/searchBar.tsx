@@ -83,9 +83,7 @@ const SearchBar = (props: {
         closeOnBlur={true}
         closeOnSubmit={false}
         onSelectItem={newItem => setSelectedItem(newItem)}
-        dataSet={
-          dropDownValues
-        } /*Doesn't rerender immediatly after getting values ???*/
+        dataSet={dropDownValues}
         textInputProps={{
           placeholder: props.placeholder,
         }}
