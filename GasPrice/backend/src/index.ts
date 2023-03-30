@@ -14,3 +14,5 @@ app.use("/", routes);
 app.listen(ENV.port, () => {
   console.log(`Listening on port ${ENV.port}`);
 });
+
+module.exports = app;

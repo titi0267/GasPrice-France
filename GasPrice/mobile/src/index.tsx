@@ -20,6 +20,7 @@ const PathInput = () => {
   const [disable, setDisable] = useState(true);
   const [itinerary, setItinerary] = useState<GeoJSON.Feature>(null);
   const [departmentToLoad, setDepartmentToLoad] = useState<string[]>([]);
+  const [readyToFetchGasData, setreadyToFetchGasData] = useState(false);
   const [storeGasData, setStoreGasData] = useState(false);
 
   const geoCodingStartCallback = (
@@ -37,9 +38,11 @@ const PathInput = () => {
     ]);
     console.log("add dep: " + departmentToLoadFromMapView);
   };
-  const storeGasDataCallback = (storeGasDataFromMapView: boolean) => {
-    setStoreGasData(storeGasDataFromMapView);
-    console.log("Set new state: " + storeGasDataFromMapView);
+  const readyToFetchGasDataCallback = (
+    readyToFetchGasDataFromMapView: boolean,
+  ) => {
+    setreadyToFetchGasData(readyToFetchGasDataFromMapView);
+    console.log("Set new state: " + readyToFetchGasDataFromMapView);
   };
 
   const addItem = (newItem: DatasetGasStation) => {
@@ -48,41 +51,57 @@ const PathInput = () => {
     console.log(gasData.length);
   };
   useEffect(() => {
-    if (itinerary && itinerary.geometry.type == "LineString") {
-      if (storeGasData == true) {
-        const uniqueDepartment = Array.from(new Set(departmentToLoad));
-        uniqueDepartment.forEach(element => {
-          console.log("recherche sur : " + element);
-          fetchGasStationList({
-            code_department: element.toString(),
+    if (readyToFetchGasData == true) {
+      const uniqueDepartment = Array.from(new Set(departmentToLoad));
+      let count = uniqueDepartment.length;
+      for (let i = 0; i < uniqueDepartment.length; i++) {
+        const element = uniqueDepartment[i];
+
+        console.log("recherche sur : " + element);
+        fetchGasStationList({
+          code_department: element.toString(),
+        })
+          .catch(error => {
+            console.log(error);
           })
-            .catch(error => {
-              console.log(error);
-            })
-            .then(prices => {
-              if (!prices) {
-                console.log("probleme sur " + element);
+          .then(prices => {
+            if (!prices) {
+              console.log("probleme sur " + element);
+              return;
+            }
+            console.log("result nbr: " + prices.nhits + " for: " + element);
+            if (!prices.records) {
+              console.log("record is empty !");
+              return;
+            }
+            prices.records.forEach(element => {
+              if (gasData.some(item => item.recordid === element.recordid))
                 return;
-              }
-              console.log("result nbr: " + prices.nhits + " for: " + element);
-              if (!prices.records) {
-                console.log("record is empty !");
-                return;
-              }
-              prices.records.forEach(element => {
-                if (gasData.some(item => item.recordid === element.recordid))
-                  return;
-                setGasData(prevData => [...prevData, element]);
-              });
+              setGasData(prevData => [...prevData, element]);
             });
-        });
-        setStoreGasData(false);
+          })
+          .finally(() => {
+            count--;
+          });
       }
+      const checkAllResolved = setInterval(() => {
+
+        if (count === 0) {
+          setStoreGasData(true);
+          setreadyToFetchGasData(false);
+
+          clearInterval(checkAllResolved);
+        }
+      }, 100);
+
+      return () => clearInterval(checkAllResolved);
+    }
+  }, [readyToFetchGasData]);
+  useEffect(() => {
+    if (storeGasData == true) {
+      console.log("data len = " + gasData.length);
     }
   }, [storeGasData]);
-  useEffect(() => {
-    console.log("data len = " + gasData.length);
-  }, [gasData]);
 
   if (
     disable == true &&
@@ -153,7 +172,7 @@ const PathInput = () => {
       <MapView
         itinerary={itinerary}
         departmentToLoadCallback={departmentToLoadCallback}
-        storeGasDataCallback={storeGasDataCallback}
+        readyToFetchGasDataCallback={readyToFetchGasDataCallback}
       />
     </View>
   );

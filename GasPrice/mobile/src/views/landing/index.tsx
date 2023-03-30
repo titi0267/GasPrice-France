@@ -7,7 +7,7 @@ import fetchGeoCode from "../../services/fetchGeoCode.service";
 const MapView = (props: {
   itinerary: GeoJSON.Feature;
   departmentToLoadCallback: React.Dispatch<React.SetStateAction<string[]>>;
-  storeGasDataCallback: React.Dispatch<React.SetStateAction<boolean>>;
+  readyToFetchGasDataCallback: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   MapboxGl.setWellKnownTileServer("Mapbox");
   MapboxGl.setAccessToken(ENV.mapboxApiKey);
@@ -46,9 +46,9 @@ const MapView = (props: {
         elementId += 1;
       }
       const checkAllResolved = setInterval(() => {
+        console.log("Autre count a 0?");
         if (count === 0) {
-          console.log("Pass a true");
-          props.storeGasDataCallback(true);
+          props.readyToFetchGasDataCallback(true);
           clearInterval(checkAllResolved);
         }
       }, 100);
