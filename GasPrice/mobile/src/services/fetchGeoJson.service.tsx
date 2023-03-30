@@ -5,7 +5,7 @@ const fetchGeoJsonResults = async (body: {
   start: string;
   end: string;
 }): Promise<GeoJSON.Feature[]> => {
-  const res = await fetch(`http://${ENV.host}:${ENV.portBack}/geoJson`, {
+  const res = await fetch(`${ENV.host}/geoJson`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -4,7 +4,7 @@ import { GeoCodingData } from "@/types/geoCoding.type";
 const fetchGeoCodingResults = async (body: {
   adress: string;
 }): Promise<GeoCodingData[]> => {
-  const res = await fetch(`http://${ENV.host}:${ENV.portBack}/geoCoding`, {
+  const res = await fetch(`${ENV.host}/geoCoding`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

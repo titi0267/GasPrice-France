@@ -3,7 +3,7 @@ import ENV from "../env";
 const fetchGeoCode = async (body: {
   coords: [number, number];
 }): Promise<string> => {
-  const res = await fetch(`http://${ENV.host}:${ENV.portBack}/geoCode`, {
+  const res = await fetch(`${ENV.host}/geoCode`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

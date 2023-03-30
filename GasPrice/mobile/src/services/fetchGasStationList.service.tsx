@@ -4,7 +4,7 @@ import ENV from "../env";
 const fetchGasStationList = async (body: {
   code_department: string;
 }): Promise<GasStationList> => {
-  const res = await fetch(`http://${ENV.host}:${ENV.portBack}/gasStations`, {
+  const res = await fetch(`${ENV.host}/gasStations`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
