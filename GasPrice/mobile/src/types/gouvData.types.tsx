@@ -9,7 +9,7 @@ export interface DatasetGasStation {
   fields: GasStationData;
   geometry: {
     type: string;
-    coordinates: [];
+    coordinates: number[];
   };
   //record_timestamp: string;
 }

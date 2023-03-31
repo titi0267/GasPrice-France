@@ -3,11 +3,13 @@ import { Text, TextInput, View, StyleSheet } from "react-native";
 import ENV from "../../env";
 import MapboxGl from "@rnmapbox/maps";
 import fetchGeoCode from "../../services/fetchGeoCode.service";
+import { DatasetGasStation } from "@/types/gouvData.types";
 
 const MapView = (props: {
   itinerary: GeoJSON.Feature;
   departmentToLoadCallback: React.Dispatch<React.SetStateAction<string[]>>;
   readyToFetchGasDataCallback: React.Dispatch<React.SetStateAction<boolean>>;
+  refineGasStations: DatasetGasStation[];
 }) => {
   MapboxGl.setWellKnownTileServer("Mapbox");
   MapboxGl.setAccessToken(ENV.mapboxApiKey);
@@ -23,6 +25,31 @@ const MapView = (props: {
     });
     console.log("center cam to france");
   }, [camera.current]);
+
+  useEffect(() => {
+    console.log("stations a promximité: " + props.refineGasStations.length);
+  }, [props.refineGasStations]);
+  const renderSinglePoint = (recordId: string, coords: number[]) => {
+    return (
+      <MapboxGl.PointAnnotation
+        key={recordId}
+        id={recordId}
+        coordinate={coords}>
+        <View style={styles.annotationContainer}></View>
+      </MapboxGl.PointAnnotation>
+    );
+  };
+  const loopOnPointsRendering = () => {
+    const allMarkers = [];
+    for (let i = 0; i < props.refineGasStations.length; i++)
+      allMarkers.push(
+        renderSinglePoint(
+          props.refineGasStations[i].recordid,
+          props.refineGasStations[i].geometry.coordinates,
+        ),
+      );
+    return allMarkers;
+  };
   useEffect(() => {
     if (!props.itinerary) return;
     let elementId = 0;
@@ -74,6 +101,7 @@ const MapView = (props: {
       <View style={styles.container}>
         <MapboxGl.MapView style={styles.map} rotateEnabled={false}>
           <MapboxGl.Camera ref={camera} />
+          {loopOnPointsRendering()}
           {renderItinerary()}
         </MapboxGl.MapView>
       </View>
@@ -93,6 +121,17 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  annotationContainer: {
+    alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "rgba(0, 0, 0, 0.45)",
+    borderRadius: 40 / 2,
+    borderWidth: StyleSheet.hairlineWidth,
+    height: 40,
+    justifyContent: "center",
+    overflow: "hidden",
+    width: 40,
   },
 });
 export default MapView;
