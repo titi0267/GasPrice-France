@@ -19,7 +19,7 @@ const getCodeFromCoords = async (coords: [number, number]): Promise<string> => {
       ) {
         element.properties.citycode.forEach(code => {
           if (code?.length == 2) {
-            departement_code = code;
+            departement_code = code.toString();
           }
         });
       }
