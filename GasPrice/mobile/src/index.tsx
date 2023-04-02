@@ -10,7 +10,7 @@ import { DatasetGasStation } from "./types/gouvData.types";
 import { Camera } from "@rnmapbox/maps";
 import { GeoCodingData } from "./types/geoCoding.type";
 
-const Main = () => {
+const Main = (props: { viewCallback; view: number }) => {
   const camera = useRef<Camera>(null);
   const [departmentToLoad, setDepartmentToLoad] = useState<string[]>([""]);
   const [gasData, setGasData] = useState<DatasetGasStation[]>([]);
@@ -24,7 +24,6 @@ const Main = () => {
   const [refineGasStation, setRefineGasStation] = useState<DatasetGasStation[]>(
     [],
   );
-  const [view, setView] = useState(0);
 
   const departmentToLoadCallback = (departmentToLoadCb: string[]) => {
     if (departmentToLoadCb.length == 0) {
@@ -62,10 +61,8 @@ const Main = () => {
   const refineGasStationCallback = refineGasStationsCallback => {
     setRefineGasStation(refineGasStationsCallback);
   };
-  const viewCallback = (viewCallback: number) => {
-    setView(viewCallback);
-  };
-  switch (view) {
+
+  switch (props.view) {
     case Views.HOME:
       return (
         <Home
@@ -81,7 +78,7 @@ const Main = () => {
           readyToFetchGasDataCallback={readyToFetchGasDataCallback}
           readyToFetchGasData={readyToFetchGasData}
           refineGasStationsCallback={refineGasStationCallback}
-          viewCallback={viewCallback}></Home>
+          viewCallback={props.viewCallback}></Home>
       );
     case Views.SEARCH:
       return (
@@ -100,7 +97,7 @@ const Main = () => {
           refineGasStationsCallback={refineGasStationCallback}
           readyToFetchGasDataCallback={readyToFetchGasDataCallback}
           readyToFetchGasData={readyToFetchGasData}
-          viewCallback={viewCallback}></Search>
+          viewCallback={props.viewCallback}></Search>
       );
     case Views.TABLE:
       return (

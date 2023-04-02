@@ -15,12 +15,13 @@ const Table = (props: {
     });
   };
   const renderSingleRow = (
+    recordId: string,
     selectedPrice: string,
     city: string,
     coords: number[],
   ) => {
     return (
-      <DataTable.Row>
+      <DataTable.Row key={recordId}>
         <DataTable.Cell>{city}</DataTable.Cell>
         <View>
           <Button
@@ -40,6 +41,7 @@ const Table = (props: {
     for (let i = 0; i < props.gasDataAvailable.length && i < 5; i++) {
       tableRows.push(
         renderSingleRow(
+          props.gasDataAvailable[i].recordid,
           props.gasDataAvailable[i].fields.e10_prix,
           props.gasDataAvailable[i].fields.ville,
           props.gasDataAvailable[i].geometry.coordinates,
