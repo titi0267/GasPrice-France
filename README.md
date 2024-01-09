@@ -9,4 +9,4 @@ You will then be able to view all of the gas stations near your itinerary along 
 
 ### Suggestions
 
-Feel free to suggest modifications or new features to this app !
+Feel free to open issues for suggestions, bugs or new features that you would like to see in this app !
