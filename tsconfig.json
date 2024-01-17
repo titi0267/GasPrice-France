@@ -12,6 +12,6 @@
     "skipLibCheck": true,
     "strictNullChecks": true
   },
-  "include": ["./src/**/*", "./tests/**/*"],
+  "include": ["Api/**/*", "./tests/**/*", "Api/env.ts", "Api/index.ts"],
   "exclude": ["./dist/**/*", "./__tests__/**/*", "./tmp/**/*"]
 }
