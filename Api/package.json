@@ -15,9 +15,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^4.17.17",
-    "@types/node": "^18.15.10",
+    "@types/node": "^20.11.5",
     "prettier": "2.8.7",
-    "typescript": "^5.0.2"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
