@@ -5,21 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const request_services_1 = __importDefault(require("../../services/request.services"));
 const getCodeFromCoords = async (coords) => {
-    const res = await (0, request_services_1.default)(`https://wxs.ign.fr/essentiels/geoportail/geocodage/rest/0.1/reverse?lon=${coords[0].toString()}&lat=${coords[1].toString()}&index=poi&limit=5`, "GET", "GeoServices");
+    const res = await (0, request_services_1.default)(`https://api-adresse.data.gouv.fr/reverse?lon=${coords[0].toString()}&lat=${coords[1].toString()}&limit=1`, "GET", "GeoServices");
     let departement_code = "01";
-    if (res) {
-        res.features.forEach(element => {
-            if (element.properties.city &&
-                element.properties.city.length > 0 &&
-                element.properties.citycode &&
-                element.properties.citycode.length > 0) {
-                element.properties.citycode.forEach(code => {
-                    if (code?.length == 2) {
-                        departement_code = code.toString();
-                    }
-                });
-            }
-        });
+    if (res && res.features.length == 1) {
+        departement_code = res.features[0].properties.id.substring(0, 2);
     }
     return departement_code;
 };
