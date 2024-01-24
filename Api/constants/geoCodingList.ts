@@ -5,6 +5,7 @@ export interface GeoCodingList {
     coordinates: [number, number];
   };
   properties: geoCodingData;
+  score: number;
 }
 
 interface geoCodingData {

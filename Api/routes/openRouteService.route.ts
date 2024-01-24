@@ -6,6 +6,7 @@ export const geoCodingRoute = Router();
 
 geoCodingRoute.post("/geoCoding", async (req: Request, res: Response) => {
   const { adress } = req.body;
+  console.log("Problem", adress);
 
   if (adress && typeof adress === "string")
     res.send(await autoCompleteAdress(adress));
