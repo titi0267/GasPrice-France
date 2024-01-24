@@ -7,7 +7,6 @@ const request_services_1 = __importDefault(require("../../services/request.servi
 const fetchGasStations = async (code_department) => {
     const fetchNumberOfResult = await (0, request_services_1.default)(`https://data.economie.gouv.fr/api/records/1.0/search/?dataset=prix-des-carburants-en-france-flux-instantane-v2&q=&rows=0&facet=code_departement&refine.code_departement=${code_department}`, "GET", "gouv.data gas stations");
     const fetchGasStations = await (0, request_services_1.default)(`https://data.economie.gouv.fr/api/records/1.0/search/?dataset=prix-des-carburants-en-france-flux-instantane-v2&q=&rows=${fetchNumberOfResult.nhits}&facet=code_departement&refine.code_departement=${code_department}`, "GET", "gouv.data gas stations");
-    console.log("NUmber of results for " + code_department + " : " + fetchGasStations.nhits);
     const refineRecords = [];
     fetchGasStations.records.map(element => {
         refineRecords.push({

@@ -21,9 +21,6 @@ const fetchGasStations = async (code_department: string) => {
     "GET",
     "gouv.data gas stations",
   );
-  console.log(
-    "NUmber of results for " + code_department + " : " + fetchGasStations.nhits,
-  );
 
   const refineRecords: {
     recordid: string;

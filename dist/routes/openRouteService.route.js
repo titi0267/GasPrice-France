@@ -7,7 +7,6 @@ const express_1 = require("express");
 exports.geoCodingRoute = (0, express_1.Router)();
 exports.geoCodingRoute.post("/geoCoding", async (req, res) => {
     const { adress } = req.body;
-    console.log("Problem", adress);
     if (adress && typeof adress === "string")
         res.send(await (0, Adresses_1.autoCompleteAdress)(adress));
     else {

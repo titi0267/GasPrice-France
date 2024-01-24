@@ -5,29 +5,21 @@ export interface GeoCodingList {
     coordinates: [number, number];
   };
   properties: geoCodingData;
-  score: number;
 }
 
 interface geoCodingData {
-  id: string;
-  gid: string;
-  layer: string;
-  source: string;
-  source_id: string;
-  name: string;
-  accuracy: string;
-  country: string;
-  counrty_gid: string;
-  country_a: string;
-  region: string;
-  region_gid: string;
-  region_a: string;
-  continent: string;
-  continent_gid: string;
   label: string;
-  addendum: {
-    geonames: {
-      feature_code: string;
-    };
-  };
+  score: number;
+  id: string;
+  type: string;
+  name: string;
+  postCode: string;
+  cityCode: string;
+  x: number;
+  y: number;
+  population: number;
+  city: string;
+  context: string;
+  importance: number;
+  municipality: string;
 }
