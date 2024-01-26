@@ -6,12 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const request_services_1 = __importDefault(require("../../services/request.services"));
 const getCodeFromCoords = async (coords) => {
     console.log(coords);
-    const res = await (0, request_services_1.default)(`https://api-adresse.data.gouv.fr/reverse?lon=${coords[0]
-        .toFixed(2)
-        .toString()}&lat=${coords[1].toFixed(2).toString()}&limit=1`, "GET", "GeoServices");
+    const res = await (0, request_services_1.default)(`https://geo.api.gouv.fr/communes?lon=${coords[0].toString()}&lat=${coords[1].toString()}`, "GET", "GeoServices");
     let departement_code = "01";
-    if (res && res.features.length == 1) {
-        departement_code = res.features[0].properties.id.substring(0, 2);
+    console.log(res);
+    if (res && res.length == 1) {
+        departement_code = res[0].codeDepartement;
     }
     return departement_code;
 };
