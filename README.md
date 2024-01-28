@@ -1,12 +1,40 @@
-# Gas prices
+# Gas prices Api
 
-Check the lowest gas prices on your itinerary.
+Use this Api with [GasPrices](https://github.com/titi0267/GasPrices)
 
 ## Description
 
-This is a react-native project, the goal is to select the fuel that you need and the itinerary that you are currently on.
-You will then be able to view all of the gas stations near your itinerary along with the prices at which the fuel is to save some money !
+This project fetches the data that I need to run the [GasPrices](https://github.com/titi0267/GasPrices) app.
 
-### Suggestions
+The project is hosted on [Vercel](https://vercel.com/dashboard), but you may want to run it in local because some Api may run out of free requests
+
+## Installation
+
+1. Add a .env file with the following fields to the project.
+
+   Api port listens on 8080 by default
+
+   ```.env
+    PORT=8080
+   ```
+
+   Generate a [OPEN ROUTE api key](https://openrouteservice.org/) to generate an itinerary
+
+   ```.env
+    OPEN_ROUTE_SERVICE_API_KEY==
+   ```
+
+2. Install the dependencies with npm
+
+   ```bash
+   npm i
+   ```
+
+## Launch
+
+Launch the project with
+`npm run start`.
+
+## Suggestions
 
 Feel free to open issues for suggestions, bugs or new features that you would like to see in this app !
