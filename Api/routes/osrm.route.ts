@@ -1,5 +1,5 @@
 import { autoCompleteAdress } from "../ApiCalls/Adresses";
-import { generateGeoJsonCoordinates } from "../ApiCalls/OpenRouteService";
+import { generateGeoJsonCoordinates } from "../ApiCalls/Osrm";
 import { Request, Response, Router } from "express";
 
 export const geoCodingRoute = Router();
