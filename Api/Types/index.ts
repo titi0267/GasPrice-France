@@ -6,7 +6,7 @@ interface CustomGeoJson {
   };
   legs?: {}[];
   weight_name?: string;
-  weight?: number;
+  weight: number;
   duration?: number;
   distance?: number;
 }

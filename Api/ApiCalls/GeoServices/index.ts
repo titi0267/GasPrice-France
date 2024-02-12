@@ -5,7 +5,7 @@ import makeRequest from "../../services/request.services";
 
 const getCodeFromCoords = async (coords: [number, number]): Promise<string> => {
   const res = await makeRequest<Array<DepartmentCodes>>(
-    `https://geo.api.gouv.fr/communes?lon=${coords[1].toString()}&lat=${coords[0].toString()}`,
+    `https://geo.api.gouv.fr/communes?lon=${coords[0].toString()}&lat=${coords[1].toString()}`,
     "GET",
     "GeoServices",
   );
@@ -14,7 +14,6 @@ const getCodeFromCoords = async (coords: [number, number]): Promise<string> => {
   if (res && res.length == 1) {
     departement_code = res[0].codeDepartement;
   }
-
   return departement_code;
 };
 

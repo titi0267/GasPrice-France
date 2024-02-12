@@ -15,6 +15,6 @@ const generateGeoJsonCoordinates = async (start: string, end: string) => {
     delete route?.legs;
   });
 
-  return generationResult.routes;
+  return generationResult.routes.slice().sort((a, b) => b.weight - a.weight);
 };
 export { generateGeoJsonCoordinates };

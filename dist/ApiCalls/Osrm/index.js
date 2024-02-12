@@ -11,7 +11,7 @@ const generateGeoJsonCoordinates = async (start, end) => {
         route.type = "Feature";
         delete route?.legs;
     });
-    return generationResult.routes;
+    return generationResult.routes.slice().sort((a, b) => b.weight - a.weight);
 };
 exports.generateGeoJsonCoordinates = generateGeoJsonCoordinates;
 //# sourceMappingURL=index.js.map
