@@ -27,7 +27,6 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const ENV = {
     port: process.env.PORT || "8080",
-    openRouteServiceApiKey: process.env.OPEN_ROUTE_SERVICE_API_KEY,
 };
 exports.default = ENV;
 //# sourceMappingURL=env.js.map

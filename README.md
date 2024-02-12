@@ -18,12 +18,6 @@ The project is hosted on [Vercel](https://vercel.com/dashboard), but you may wan
     PORT=8080
    ```
 
-   Generate a [OPEN ROUTE api key](https://openrouteservice.org/) to generate an itinerary
-
-   ```.env
-    OPEN_ROUTE_SERVICE_API_KEY==
-   ```
-
 2. Install the dependencies with npm
 
    ```bash
