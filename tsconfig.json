@@ -12,6 +12,12 @@
     "skipLibCheck": true,
     "strictNullChecks": true
   },
-  "include": ["Api/**/*", "./tests/**/*", "Api/env.ts", "Api/index.ts"],
+  "include": [
+    "Api/**/*",
+    "./tests/**/*",
+    "Api/env.ts",
+    "Api/index.ts",
+    "Api/Dataset/Cities/cities.json"
+  ],
   "exclude": ["./dist/**/*", "./__tests__/**/*", "./tmp/**/*"]
 }
