@@ -3,15 +3,14 @@ import makeRequest from "../../services/request.services";
 import * as fs from "fs";
 
 interface Cities {
-  departement: string;
-  communes: string[];
+  cities: { departement: string; communes: string[] }[];
 }
 
-const rawData = fs.readFileSync("/data/cities.json", "utf-8");
-const data: Cities[] = JSON.parse(rawData);
+const rawData = fs.readFileSync("public/data/cities.json", "utf-8");
+const data: Cities = JSON.parse(rawData);
 
 const autoCompleteAdress = (adress: string) => {
-  const filteredData = data.map(departments =>
+  const filteredData = data.cities.map(departments =>
     departments.communes.filter((city, index) => {
       const queryString = adress
         .toLowerCase()
