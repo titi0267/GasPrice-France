@@ -6,7 +6,7 @@ interface Cities {
   cities: { departement: string; communes: string[] }[];
 }
 
-const rawData = fs.readFileSync("public/data/cities.json", "utf-8");
+const rawData = fs.readFileSync("/public/data/cities.json", "utf-8");
 const data: Cities = JSON.parse(rawData);
 
 const autoCompleteAdress = (adress: string) => {

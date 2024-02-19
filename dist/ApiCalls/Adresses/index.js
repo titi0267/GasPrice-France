@@ -29,7 +29,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLocationByName = exports.autoCompleteAdress = void 0;
 const request_services_1 = __importDefault(require("../../services/request.services"));
 const fs = __importStar(require("fs"));
-const rawData = fs.readFileSync("public/data/cities.json", "utf-8");
+const rawData = fs.readFileSync("/public/data/cities.json", "utf-8");
 const data = JSON.parse(rawData);
 const autoCompleteAdress = (adress) => {
     const filteredData = data.cities.map(departments => departments.communes.filter((city, index) => {
