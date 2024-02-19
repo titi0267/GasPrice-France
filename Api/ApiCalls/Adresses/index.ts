@@ -7,7 +7,7 @@ interface Cities {
   communes: string[];
 }
 
-const rawData = fs.readFileSync("../../Dataset/Cities/cities.json", "utf-8");
+const rawData = fs.readFileSync("/data/cities.json", "utf-8");
 const data: Cities[] = JSON.parse(rawData);
 
 const autoCompleteAdress = (adress: string) => {
