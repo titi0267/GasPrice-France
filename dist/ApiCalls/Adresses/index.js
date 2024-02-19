@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocationByName = exports.autoCompleteAdress = void 0;
+exports.autoCompleteAdressObsolete = exports.getLocationByName = exports.autoCompleteAdress = void 0;
 const path_1 = __importDefault(require("path"));
 const request_services_1 = __importDefault(require("../../services/request.services"));
 const fs = __importStar(require("fs"));
@@ -66,6 +66,26 @@ const autoCompleteAdress = (adress) => {
     return combinedArray.slice(0, 20);
 };
 exports.autoCompleteAdress = autoCompleteAdress;
+const autoCompleteAdressObsolete = async (adress) => {
+    const autoCompleteResult = await (0, request_services_1.default)(`https://api-adresse.data.gouv.fr/search/?q=${adress}&type=municipality&limit=20`, "GET", "api-adresse.data.gouv.fr");
+    const refineResult = [];
+    let maxResult = 0;
+    autoCompleteResult.features.map((loc) => {
+        if (maxResult > 50)
+            return;
+        if (loc.properties.score > 0.5) {
+            refineResult.push({
+                id: loc.properties.id,
+                name: loc.properties.name,
+                label: loc.properties.label,
+                geometry: [loc.geometry.coordinates[0], loc.geometry.coordinates[1]],
+            });
+            maxResult += 1;
+        }
+    });
+    return refineResult;
+};
+exports.autoCompleteAdressObsolete = autoCompleteAdressObsolete;
 const getLocationByName = async (adress) => {
     const cityResult = await (0, request_services_1.default)(`https://api-adresse.data.gouv.fr/search/?q=${adress}&type=municipality&limit=20`, "GET", "api-adresse.data.gouv.fr");
     const refineResult = cityResult.features.map((loc) => {
