@@ -11,9 +11,12 @@ const rawData = fs.readFileSync(
   path.join(process.cwd(), "/public/data/cities.json"),
   "utf-8",
 );
+
 const data: Cities = JSON.parse(rawData);
 
 const autoCompleteAdress = (adress: string) => {
+  console.log(path.join(process.cwd(), "/public/data/cities.json"));
+
   const filteredData = data.cities.map(departments =>
     departments.communes.filter((city, index) => {
       const queryString = adress
