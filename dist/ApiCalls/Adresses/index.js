@@ -33,7 +33,6 @@ const fs = __importStar(require("fs"));
 const rawData = fs.readFileSync(path_1.default.join(process.cwd(), "/public/data/cities.json"), "utf-8");
 const data = JSON.parse(rawData);
 const autoCompleteAdress = (adress) => {
-    console.log(path_1.default.join(process.cwd(), "/public/data/cities.json"));
     const filteredData = data.cities.map(departments => departments.communes.filter((city, index) => {
         const queryString = adress
             .toLowerCase()

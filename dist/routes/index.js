@@ -10,10 +10,12 @@ const defaultRoute_1 = require("./defaultRoute");
 const osrm_route_1 = require("./osrm.route");
 const geoCode_route_1 = require("./geoCode.route");
 const cityName_route_1 = require("./cityName.route");
+const updateApp_route_1 = require("./updateApp.route");
 exports.routes = express_1.default.Router();
 exports.routes.use(gasStation_route_1.gasStationRoute);
 exports.routes.use(defaultRoute_1.defaultRoute);
 exports.routes.use(osrm_route_1.geoCodingRoute);
 exports.routes.use(geoCode_route_1.geoCodeRoute);
 exports.routes.use(cityName_route_1.cityDataRoute);
+exports.routes.use(updateApp_route_1.updateAppRoute);
 //# sourceMappingURL=index.js.map
