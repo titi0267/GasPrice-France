@@ -4,7 +4,7 @@ dotenv.config();
 
 const ENV = {
   port: (process.env.PORT as string) || "8080",
-  version: (process.env.VERSION as string) || "0.0.5",
+  version: (process.env.VERSION as string) || "0.0.3",
 };
 
 export default ENV;
