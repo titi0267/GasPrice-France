@@ -27,7 +27,7 @@ const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 const ENV = {
     port: process.env.PORT || "8080",
-    version: process.env.VERSION || "0.0.3",
+    version: process.env.VERSION || "0.0.5",
 };
 exports.default = ENV;
 //# sourceMappingURL=env.js.map

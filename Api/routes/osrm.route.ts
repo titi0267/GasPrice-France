@@ -23,6 +23,8 @@ geoCodingRoute.post("/geoCoding", async (req: Request, res: Response) => {
 geoCodingRoute.post("/geoJson", async (req: Request, res: Response) => {
   const { start, end } = req.body;
 
+  console.log("geojson service");
+
   if (start && end && typeof start === "string" && typeof end === "string")
     res.send(await generateGeoJsonCoordinates(start, end));
   else {

@@ -18,6 +18,7 @@ exports.geoCodingRoute.post("/geoCoding", async (req, res) => {
 });
 exports.geoCodingRoute.post("/geoJson", async (req, res) => {
     const { start, end } = req.body;
+    console.log("geojson service");
     if (start && end && typeof start === "string" && typeof end === "string")
         res.send(await (0, Osrm_1.generateGeoJsonCoordinates)(start, end));
     else {
