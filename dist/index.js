@@ -8,6 +8,9 @@ const routes_1 = require("./routes");
 const body_parser_1 = __importDefault(require("body-parser"));
 const env_1 = __importDefault(require("./env"));
 const app = (0, express_1.default)();
+const cors = require('cors');
+//cors
+app.use(cors());
 app.use(body_parser_1.default.json({ limit: "50mb", type: "application/json" }));
 app.use(body_parser_1.default.urlencoded({ limit: "50mb", extended: true }));
 //routes
